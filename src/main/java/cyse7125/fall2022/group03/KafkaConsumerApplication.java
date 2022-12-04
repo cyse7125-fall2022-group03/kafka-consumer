@@ -70,7 +70,8 @@ public class KafkaConsumerApplication {
 		LOGGER.debug(String.format("csye7125: Task received in json -> "));
 		if(task!=null) {
 			LOGGER.debug(task.toString());
-			initializeElasticSearch(task);
+			//initializeElasticSearch(task);
+			initializeElasticSearch();
 		}
 		taskMessages.add(task);
 		return taskMessages;
@@ -81,18 +82,20 @@ public class KafkaConsumerApplication {
 		SpringApplication.run(KafkaConsumerApplication.class, args);
 	}
 
-	public static void initializeElasticSearch(Task task){
-		LOGGER.debug(String.format("csye7125: Elastic search received -> " + task.toString()));
+	//public static void initializeElasticSearch(Task task){
+	public static void initializeElasticSearch(){
+		//LOGGER.debug(String.format("csye7125: Elastic search received -> " + task.toString()));
 		RestHighLevelClient client = new RestHighLevelClient(
 				RestClient.builder(new HttpHost("elasticsearch-master", 9200, "http")));
 		IndexRequest indexRequest = new IndexRequest("sampleIndex");
 		indexRequest.id("003");
 		try {
 			LOGGER.debug(String.format("csye7125: Elastic search inside try index -> " + indexRequest.toString()));
-			indexRequest.source(new ObjectMapper().writeValueAsString(task), XContentType.JSON);
+			//indexRequest.source(new ObjectMapper().writeValueAsString(task), XContentType.JSON);
+			indexRequest.source("apple");
 			LOGGER.debug(String.format("csye7125: Elastic search inside try index -> " + indexRequest.toString()));
 			
-		} catch (JsonProcessingException e) {
+		} catch (Exception e) {
 			LOGGER.debug(String.format("got an exception ***"));
 			throw new RuntimeException(e);
 		}
