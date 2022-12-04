@@ -1,14 +1,22 @@
 package cyse7125.fall2022.group03;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import cyse7125.fall2022.group03.model.Comment;
+import cyse7125.fall2022.group03.model.Remainder;
+import cyse7125.fall2022.group03.model.Tag;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.indices.CreateIndexRequest;
+import org.elasticsearch.client.indices.CreateIndexResponse;
+import org.elasticsearch.client.indices.GetIndexRequest;
+import org.elasticsearch.common.settings.Settings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -71,7 +79,8 @@ public class KafkaConsumerApplication {
 		if(task!=null) {
 			LOGGER.debug(task.toString());
 			//initializeElasticSearch(task);
-			initializeElasticSearch();
+			//initializeElasticSearch();
+			createElasticClient(task);
 		}
 		taskMessages.add(task);
 		return taskMessages;
@@ -107,6 +116,39 @@ public class KafkaConsumerApplication {
 			throw new RuntimeException(e);
 		}
 
+	}
+
+	public static void createElasticClient(Task task) {
+		try {
+		RestHighLevelClient client = new RestHighLevelClient(
+				RestClient.builder(new HttpHost("elasticsearch-master", 9200, "http")));
+
+//		CreateIndexRequest request = new CreateIndexRequest("taskindex");
+//		request.settings(Settings.builder().put("index.number_of_shards", 1).put("index.number_of_replicas", 2));
+//		if(!client.indices().exists(new GetIndexRequest("taskindex"), RequestOptions.DEFAULT)) {
+//			CreateIndexResponse createIndexResponse = client.indices().create(request, RequestOptions.DEFAULT);
+//			System.out.println("response id: " + createIndexResponse.index());
+//		}
+
+
+
+		IndexRequest indexRequest = new IndexRequest("taskindex");
+		indexRequest.id(task.getTaskId());
+		indexRequest.source(new ObjectMapper().writeValueAsString(task), XContentType.JSON);
+
+		IndexResponse indexResponse = null;
+
+		indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
+
+		LOGGER.debug(String.format("csye7125: Elastic search index response -> " + indexResponse.getId()));
+		LOGGER.debug(String.format("csye7125: Elastic search index response -> " +indexResponse.getResult().name()));
+		}catch (JsonProcessingException e) {
+			LOGGER.error(String.format("csye7125: Elastic search ERROR -> " +e));
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			LOGGER.error(String.format("csye7125: Elastic search ERROR -> " +e));
+			throw new RuntimeException(e);
+		}
 	}
 
 }
