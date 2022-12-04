@@ -40,18 +40,18 @@ public class KafkaConsumerApplication {
 	private static final String GROUP_ID_3 = "group3";
 	private static final String topicString = "topic02-team3";
 	
-	@GetMapping("/consumeStringMessage")
-	public List<String> consumeMsg() {
-		LOGGER.debug(String.format("csye7125: consumeMsg called " + messages.toString()));
-		return messages;
-	}
+//	@GetMapping("/consumeStringMessage")
+//	public List<String> consumeMsg() {
+//		LOGGER.debug(String.format("csye7125: consumeMsg called " + messages.toString()));
+//		return messages;
+//	}
 	
-	@KafkaListener(groupId = GROUP_ID, topics = topicString, containerFactory = "stringKafkaListenerContainerFactory")
-	public List<String> getMsgFromTopic(String data) {
-		LOGGER.debug("csye7125: getMsgFromTopic called received in string" + data);
-		messages.add(data);
-		return messages;
-	}
+//	@KafkaListener(groupId = GROUP_ID, topics = topicString, containerFactory = "stringKafkaListenerContainerFactory")
+//	public List<String> getMsgFromTopic(String data) {
+//		LOGGER.debug("csye7125: getMsgFromTopic called received in string" + data);
+//		messages.add(data);
+//		return messages;
+//	}
 	
 
 	@GetMapping("/consumeJsonMessage")
@@ -82,21 +82,24 @@ public class KafkaConsumerApplication {
 	}
 
 	public static void initializeElasticSearch(Task task){
-		LOGGER.debug(String.format("csye7125: Elastic search received -> "));
+		LOGGER.debug(String.format("csye7125: Elastic search received -> " + task.toString()));
 		RestHighLevelClient client = new RestHighLevelClient(
 				RestClient.builder(new HttpHost("elasticsearch-master", 9200, "http")));
 		IndexRequest indexRequest = new IndexRequest("sampleIndex");
 		indexRequest.id("003");
 		try {
-			LOGGER.debug(String.format("csye7125: Elastic search inside try index -> "));
+			LOGGER.debug(String.format("csye7125: Elastic search inside try index -> " + indexRequest.toString()));
 			indexRequest.source(new ObjectMapper().writeValueAsString(task), XContentType.JSON);
+			LOGGER.debug(String.format("csye7125: Elastic search inside try index -> " + indexRequest.toString()));
+			
 		} catch (JsonProcessingException e) {
+			LOGGER.debug(String.format("got an exception ***"));
 			throw new RuntimeException(e);
 		}
 		IndexResponse indexResponse = null;
 		try {
 			indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
-			LOGGER.debug(String.format("csye7125: Elastic search index response -> "));
+			LOGGER.debug(String.format("csye7125: Elastic search index response -> " + indexResponse.toString()));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
