@@ -26,12 +26,12 @@ public class KafkaConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String kafkaBroker;
 
-    private static final String GROUP_ID = "group2";
+   // private static final String GROUP_ID = "group2";
     private static final String GROUP_ID_3 = "group3";
-
-	// config for String plain text
+    
 	private static final Logger LOGGER = LoggerFactory.getLogger(KafkaConsumerConfig.class);
 
+	// config for String plain text
 	// @Bean
 	// public ConsumerFactory<String, String> stringConsumerFactory() {
 	// 	LOGGER.debug(String.format("csye7125: stringConsumerFactory() called  "+ kafkaBroker));
