@@ -32,24 +32,24 @@ public class KafkaConsumerConfig {
 	// config for String plain text
 	private static final Logger LOGGER = LoggerFactory.getLogger(KafkaConsumerConfig.class);
 
-	@Bean
-	public ConsumerFactory<String, String> stringConsumerFactory() {
-		LOGGER.debug(String.format("csye7125: stringConsumerFactory() called  "+ kafkaBroker));
-		Map<String, Object> configs = new HashMap<>();
-		configs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaBroker);
-		configs.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-		configs.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-		configs.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID);
-		return new DefaultKafkaConsumerFactory<>(configs);
-	}
+	// @Bean
+	// public ConsumerFactory<String, String> stringConsumerFactory() {
+	// 	LOGGER.debug(String.format("csye7125: stringConsumerFactory() called  "+ kafkaBroker));
+	// 	Map<String, Object> configs = new HashMap<>();
+	// 	configs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaBroker);
+	// 	configs.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+	// 	configs.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+	// 	configs.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID);
+	// 	return new DefaultKafkaConsumerFactory<>(configs);
+	// }
 
-	@Bean
-	public ConcurrentKafkaListenerContainerFactory<String, String> stringKafkaListenerContainerFactory() {
-		LOGGER.debug(String.format("csye7125: stringKafkaListenerContainerFactory() called  "));
-		ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<String, String>();
-		factory.setConsumerFactory(stringConsumerFactory());
-		return factory;
-	}
+	// @Bean
+	// public ConcurrentKafkaListenerContainerFactory<String, String> stringKafkaListenerContainerFactory() {
+	// 	LOGGER.debug(String.format("csye7125: stringKafkaListenerContainerFactory() called  "));
+	// 	ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<String, String>();
+	// 	factory.setConsumerFactory(stringConsumerFactory());
+	// 	return factory;
+	// }
 	
 
 	// config for json data
