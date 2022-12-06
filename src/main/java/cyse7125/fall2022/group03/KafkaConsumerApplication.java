@@ -40,7 +40,7 @@ public class KafkaConsumerApplication {
 
 //	private static final String GROUP_ID = "group2";
 	private static final String GROUP_ID_3 = "group3";
-	private static final String topicString = "topic02-team3";
+	private static final String topicString = "topic01-team3";
 	
 //	@GetMapping("/consumeStringMessage")
 //	public List<String> consumeMsg() {
@@ -81,6 +81,7 @@ public class KafkaConsumerApplication {
 
 	public static void main(String[] args) {
 		LOGGER.debug(String.format("csye7125: main method called "));
+		
 		SpringApplication.run(KafkaConsumerApplication.class, args);
 	}
 
@@ -102,8 +103,6 @@ public class KafkaConsumerApplication {
 			LOGGER.debug(String.format("got 1 exception ***"));
 			e.printStackTrace();
 		}
-
-
 
 		IndexRequest indexRequest = new IndexRequest("taskindex");
 		indexRequest.id(task.getTaskId());
